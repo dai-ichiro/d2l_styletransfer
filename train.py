@@ -100,8 +100,9 @@ class SynthesizedImage(nn.Block):
 def get_inits(X, device, lr, styles_Y):
     gen_img = SynthesizedImage(X.shape)
     gen_img.initialize(init.Constant(X), device=device, force_reinit=True)
-    trainer = gluon.Trainer(gen_img.collect_params(), 'adam',
-                            {'learning_rate': lr})
+    trainer = gluon.Trainer(gen_img.collect_params(), 
+                            optimizer = 'Adam',
+                            optimizer_params = {'learning_rate': lr})
     styles_Y_gram = [gram(Y) for Y in styles_Y]
     return gen_img(), styles_Y_gram, trainer
 
@@ -129,4 +130,5 @@ _, styles_Y = get_styles(image_shape, device)
 output = train(content_X, contents_Y, styles_Y, device, 0.9, 500, 50)
 
 pil_image = array_to_pil(output)
+pil_image.save('result.png')
 pil_image.show()

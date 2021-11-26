@@ -1,5 +1,3 @@
-# d2l_styletransfer
+# d2l_styletransfer for MXNet2.0.
 
-This script is for MXNet2.0.
-
-This is based on Dive into Deep Learning.
+This script is based on Dive into Deep Learning.

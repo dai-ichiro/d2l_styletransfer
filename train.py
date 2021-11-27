@@ -2,14 +2,12 @@ from mxnet import autograd, gluon, image, init, np, npx
 from mxnet.gluon import utils, nn, Parameter
 from PIL import Image
 
-
 # Reading the Content and Style Images
 content_img_fname = utils.download('https://github.com/d2l-ai/d2l-en/raw/master/img/rainier.jpg')
 content_img = image.imread(content_img_fname)
 
 style_img_fname = utils.download('https://github.com/d2l-ai/d2l-en/raw/master/img/autumn-oak.jpg')
 style_img = image.imread(style_img_fname)
-
 
 # Preprocessing and Postprocessing
 rgb_mean = np.array([0.485, 0.456, 0.406])
@@ -55,7 +53,6 @@ def get_styles(image_shape, device):
     _, styles_Y = extract_features(style_X, content_layers, style_layers)
     return style_X, styles_Y
 
-
 # Defining the Loss Function
 def content_loss(Y_hat, Y):
     return np.square(Y_hat - Y).mean()
@@ -87,7 +84,6 @@ def compute_loss(X, contents_Y_hat, styles_Y_hat, contents_Y, styles_Y_gram):
     l = sum(10 * styles_l + contents_l + [tv_l])
     return l
 
-
 # Initializing the Synthesized Image
 class SynthesizedImage(nn.Block):
     def __init__(self, img_shape, **kwargs):
@@ -106,7 +102,6 @@ def get_inits(X, device, lr, styles_Y):
     styles_Y_gram = [gram(Y) for Y in styles_Y]
     return gen_img(), styles_Y_gram, trainer
 
-
 #Training
 def train(X, contents_Y, styles_Y, device, lr, num_epochs, lr_decay_epoch):
     X, styles_Y_gram, trainer = get_inits(X, device, lr, styles_Y)
@@ -120,7 +115,6 @@ def train(X, contents_Y, styles_Y, device, lr, num_epochs, lr_decay_epoch):
         if (epoch + 1) % lr_decay_epoch == 0:
             trainer.set_learning_rate(trainer.learning_rate * 0.8)
     return X
-
 
 device = npx.gpu() if npx.num_gpus() > 0 else npx.cpu()
 image_shape = (450, 300)
